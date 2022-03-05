@@ -22,44 +22,47 @@ const loadEvent = async _ => {
         `
     }
     
+
+
     const nasaCards = (sect) => {
     
         return`
             <section class="Nasa-Cards>${sect}</section>
         `
     }
-        
+        console.log(nasaCards)
     
     //Get data
 
     const nasaApiKey = 'd8rG7d4dYIisXPSU8KBH17ipMYR7pPGj1tjRgNqD';
     
-    const requestedDate = "2022-02-01";
+    const requestedDate = '2022-03-05';
     
     const nasaPic = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${nasaApiKey}&date=${requestedDate}`);
 
     
     const nasaArr = await nasaPic.json();
     
-    //console.log(nasaArr);
+    console.log(nasaArr);
 
     const rootElement = document.getElementById('root')
+
+    rootElement.insertAdjacentHTML('beforeend', nasaCards())
 
     const division = document.createElement('div')
         division.className = 'Nasa'
         document.getElementById('root').appendChild(division)
 
-    rootElement.insertAdjacentHTML('beforeend', nasaCards())
-
+        console.log(division)
 
     //Process data
 
-    /*let pictures = nasaArr.map(function(nasa) {
+    let pictures = nasaArr.map(function(nasa) {
 
         return new Nasa(nasa.date, nasa.explanation, nasa.title, nasa.hdurl)
 
     });
-        console.log(pictures)*/
+        console.log(typeof pictures)
 
         
         
