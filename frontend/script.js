@@ -1,42 +1,42 @@
-function Nasa(date, explanation, title, hdurl) {
+function Nasa(url, title, explanation, date) {
 
-    this.date = date;
-    this.explanation = explanation;
+    this.hdurl = url;
     this.title = title;
-    this.hdurl = hdurl;
+    this.explanation = explanation;
+    this.date = date;
 }  
 
 
 
 const loadEvent = async _ => {
     
-    const nasaCard = (nasa) => {
+    const nasaCard = (url, title, explanation, date) => {
             
         return `
         <div class="card">
-            <img>${nasa.hdurl}</img
-            <h2>${nasa.title}</h2>
-            <p>${nasa.explanation}</p>
-            <p>${nasa.date}</p>
+            <img src="${url}"></img>
+            <h2>${title}</h2>
+            <p>${explanation}</p>
+            <p>${date}</p>
         </div>
         `
     }
-    
+    //console.log(nasaCard)
 
 
     const nasaCards = (sect) => {
     
         return`
-            <section class="Nasa-Cards>${sect}</section>
-        `
+            <section class="Nasa-Cards"></section>
+        `;
     }
-        console.log(nasaCards)
+        //console.log(nasaCards)
     
     //Get data
 
     const nasaApiKey = 'd8rG7d4dYIisXPSU8KBH17ipMYR7pPGj1tjRgNqD';
     
-    const requestedDate = '2022-03-05';
+    const requestedDate = "2022-03-07"
     
     const nasaPic = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${nasaApiKey}&date=${requestedDate}`);
 
@@ -48,24 +48,33 @@ const loadEvent = async _ => {
     const rootElement = document.getElementById('root')
 
     rootElement.insertAdjacentHTML('beforeend', nasaCards())
+    
+    rootElement.insertAdjacentHTML('beforeend', nasaCard())
+    
+    
 
-    const division = document.createElement('div')
+    /*const division = document.createElement('div')
         division.className = 'Nasa'
-        document.getElementById('root').appendChild(division)
+        document.getElementById('root').appendChild(nasaCards).appendChild(division)
 
-        console.log(division)
+        console.log(division)*/
 
     //Process data
 
-    let pictures = nasaArr.map(function(nasa) {
+    let pictures = Array.from(nasaArr).map(function(url, title, explanation, date) {
 
-        return new Nasa(nasa.date, nasa.explanation, nasa.title, nasa.hdurl)
+        return new Nasa(url, title, explanation, date)
 
     });
-        console.log(typeof pictures)
+
+       
+
+        console.log(pictures)
 
         
         
 
 }
+
+
 window.addEventListener('load', loadEvent) 
