@@ -1,80 +1,129 @@
-function Nasa(url, title, explanation, date) {
-
-    this.hdurl = url;
-    this.title = title;
-    this.explanation = explanation;
-    this.date = date;
-}  
-
-
-
-const loadEvent = async _ => {
-    
-    const nasaCard = (url, title, explanation, date) => {
-            
-        return `
-        <div class="card">
-            <img src="${url}"></img>
-            <h2>${title}</h2>
-            <p>${explanation}</p>
-            <p>${date}</p>
-        </div>
-        `
-    }
-    //console.log(nasaCard)
-
-
-    const nasaCards = (sect) => {
-    
-        return`
-            <section class="Nasa-Cards"></section>
-        `;
-    }
-        //console.log(nasaCards)
-    
-    //Get data
-
-    const nasaApiKey = 'd8rG7d4dYIisXPSU8KBH17ipMYR7pPGj1tjRgNqD';
-    
-    const requestedDate = "2022-03-07"
-    
-    const nasaPic = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${nasaApiKey}&date=${requestedDate}`);
-
-    
-    const nasaArr = await nasaPic.json();
-    
-    console.log(nasaArr);
+function loadEvent() {
 
     const rootElement = document.getElementById('root')
 
-    rootElement.insertAdjacentHTML('beforeend', nasaCards())
+    const sect = document.createElement('section')
+    sect.setAttribute('id', 'Nasa')
+    document.getElementById('root').appendChild(sect)
+
+    const division = document.createElement('div')
+    division.className = 'Title'
+    document.getElementById('root').appendChild(sect).appendChild(division)
+
+    division.insertAdjacentHTML('beforeend', `
+        <h2 id="title"></h2>
+        <p id="date"></p>
+        <small style="display: block;" id="copyright" ></small>
+    `);
+
+    const divisionPic = document.createElement('div')
+    divisionPic.className = 'Picture'
+    document.getElementById('root').appendChild(sect).appendChild(divisionPic)
+
+    const divisionExpl = document.createElement('div')
+    divisionExpl.className = 'Explanation'
+    document.getElementById('root').appendChild(sect).appendChild(divisionExpl)
+
+    divisionExpl.insertAdjacentHTML('beforeend', `
+        <p id="explan"></p>
+        `);
+
+    const divisionDate = document.createElement('div')
+    divisionDate.className = 'Date'
+    document.getElementById('root').appendChild(sect).appendChild(divisionDate)
+
+    const divisionDatePick = document.createElement('div')
+    divisionDatePick.className = 'Date-Pick'
+    document.getElementById('root').appendChild(sect).appendChild(divisionDatePick)
+
+    divisionDatePick.insertAdjacentHTML('beforeend', `
+    <form >
+        <label for="datepicker">Pick a date:
+        <input id="datepicker" type="date" min="" max="" > 
+        </label>
+    </form>
+    `);
+
+    const divisionMedia = document.createElement('div')
+    divisionMedia.className = 'Media'
+    document.getElementById('root').appendChild(sect).appendChild(divisionMedia)
+
+
+    const nasaApiKey = 'd8rG7d4dYIisXPSU8KBH17ipMYR7pPGj1tjRgNqD';
+
+    const url = 'https://api.nasa.gov/planetary/apod?api_key=';
+
+    function fetchData(){
+        try{
+          fetch(url+nasaApiKey)
+          .then(response=>response.json())
+          .then(json=>{
+            console.log(json)
+            display(json)
+          })
+        }catch(error){
+          console.log(error)
+        }
+    }
+    fetchData()
+
+
+    const title = document.querySelector(".Title");
     
-    rootElement.insertAdjacentHTML('beforeend', nasaCard())
+    const mediaSection = document.querySelector(".Picture");
     
-    
+    const info = document.querySelector(".Explanation");
 
-    /*const division = document.createElement('div')
-        division.className = 'Nasa'
-        document.getElementById('root').appendChild(nasaCards).appendChild(division)
 
-        console.log(division)*/
+    function display(adat) {
 
-    //Process data
+        title.innerHTML = adat.title;
 
-    let pictures = Array.from(nasaArr).map(function(url, title, explanation, date) {
+        info.innerHTML = adat.explanation
 
-        return new Nasa(url, title, explanation, date)
+        const imageSection =`<a id="hdimg" href="" target="-blank">
+            <div class="image-div">
+                <img id="image_of_the_day" src="" alt="image-by-nasa">
+            </div>
+            </a>`
+            ;
 
-    });
+        const videoSection=`<div class="video-div"> 
+                <iframe id="videoLink" src=""frameborder="0">
+                </iframe>
+            </div>`
+            ;
 
+        if(adat.media_type == "video"){
+            mediaSection.innerHTML = videoSection;
+            document.getElementById("videoLink").src=adat.url;
        
+        } else {
+            mediaSection.innerHTML = imageSection;
+            document.getElementById("hdimg").href=adat.hdurl;
+            document.getElementById("image_of_the_day").src=adat.url;
+        }
 
-        console.log(pictures)
 
-        
-        
+            const dateInput = document.querySelector(".Date-Pick");
+            
+            let newDate = "&date=" + dateInput.value + "&";
+
+            fetch(url + nasaApiKey + newDate)
+
+            const currentDate = new Date().toISOString().slice(0, 10);
+                dateInput.max = currentDate;
+                dateInput.min = "2000-01-01";
+
+            
+            dateInput.addEventListener('change',(e) => {
+                 e.preventDefault();
+                 display().onload;
+                });
+            
+    }
+
 
 }
+window.addEventListener('load', loadEvent)
 
-
-window.addEventListener('load', loadEvent) 
