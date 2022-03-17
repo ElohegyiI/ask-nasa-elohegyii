@@ -96,12 +96,12 @@ function loadEvent() {
 
         if(adat.media_type == "video"){
             mediaSection.innerHTML = videoSection;
-            document.getElementById("videoLink").src=adat.url;
+            document.getElementById("videoLink").src = adat.url;
        
         } else {
             mediaSection.innerHTML = imageSection;
-            document.getElementById("hdimg").href=adat.hdurl;
-            document.getElementById("image_of_the_day").src=adat.url;
+            document.getElementById("hdimg").href = adat.hdurl;
+            document.getElementById("image_of_the_day").src = adat.url;
         }
 
 
