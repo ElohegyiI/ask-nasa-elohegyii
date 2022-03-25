@@ -53,9 +53,10 @@ function loadEvent() {
 
     const url = 'https://api.nasa.gov/planetary/apod?api_key=';
 
-    function fetchData() {
+    function fetchData(date) {
+        console.log('datum amit kaptam',date)
         try {
-          fetch(url + nasaApiKey)
+          fetch(url + nasaApiKey+'&date='+date)
           .then(response => response.json())
           .then(json => {
             console.log(json)
@@ -65,7 +66,7 @@ function loadEvent() {
           console.log(error)
         }
     }
-    fetchData()
+    fetchData(new Date().toISOString().slice(0, 10))
 
 
     const title = document.querySelector(".Title");
@@ -76,7 +77,7 @@ function loadEvent() {
 
 
     function display(adat) {
-
+        console.log('adat:',adat)
         title.innerHTML = adat.title;
 
         info.innerHTML = adat.explanation
@@ -120,7 +121,8 @@ function loadEvent() {
             
                 dateInput.addEventListener('change',(e) => {
                 e.preventDefault();
-                display().onload;  
+                console.log('datum changed',dateInput.value)
+                fetchData(dateInput.value) 
                 
                 
                 });
